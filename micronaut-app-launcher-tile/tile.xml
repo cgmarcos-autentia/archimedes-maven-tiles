@@ -9,7 +9,7 @@
 	</properties>
 
 	<tiles>
-		<tile>io.archimedesfw.maven.tiles:app-launcher-tile:1.0.0-SNAPSHOT</tile>
+		<tile>io.archimedesfw.maven.tiles:app-launcher-tile:0.0.1</tile>
 	</tiles>
 
 	<build>
@@ -19,7 +19,7 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>io.archimedesfw.maven.tiles_app-launcher-tile_1.0.0-SNAPSHOT__prepare-it-app</id>
+						<id>io.archimedesfw.maven.tiles_app-launcher-tile_0.0.1__prepare-it-app</id>
 						<configuration>
 							<tiles-keep-id>true</tiles-keep-id>
 							<images>

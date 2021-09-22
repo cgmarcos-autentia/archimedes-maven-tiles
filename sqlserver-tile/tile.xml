@@ -3,7 +3,7 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<properties>
-		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
+		<docker-maven-plugin.version>0.37.0</docker-maven-plugin.version>
 
 		<it.archimedesfw.docker.network>archimedes</it.archimedesfw.docker.network>
 		<it.archimedesfw.sqlserver.docker.image>mcr.microsoft.com/mssql/server:2017-GA-ubuntu</it.archimedesfw.sqlserver.docker.image>

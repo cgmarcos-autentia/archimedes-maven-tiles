@@ -8,7 +8,7 @@
 	</properties>
 
 	<tiles>
-		<tile>io.archimedesfw.maven.tiles:postgresql-tile:1.0.0-SNAPSHOT</tile>
+		<tile>io.archimedesfw.maven.tiles:postgresql-tile:0.0.1</tile>
 	</tiles>
 
 	<build>

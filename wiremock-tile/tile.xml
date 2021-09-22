@@ -4,7 +4,9 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<properties>
 		<docker-maven-plugin.version>0.37.0</docker-maven-plugin.version>
-		<it.archimedesfw.wiremock.docker.image>rodolpheche/wiremock:2.27.1</it.archimedesfw.wiremock.docker.image>
+
+		<it.archimedesfw.wiremock.version>2.31.0</it.archimedesfw.wiremock.version>
+		<it.archimedesfw.wiremock.docker.image>rodolpheche/wiremock:${it.archimedesfw.wiremock.version}</it.archimedesfw.wiremock.docker.image>
 		<it.archimedesfw.wiremock.docker.alias>archimedes-it-wiremock</it.archimedesfw.wiremock.docker.alias>
 		<it.archimedesfw.wiremock.docker.internal_port>8080</it.archimedesfw.wiremock.docker.internal_port>
 	</properties>

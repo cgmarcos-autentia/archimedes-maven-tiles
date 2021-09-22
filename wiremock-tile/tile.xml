@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<docker-maven-plugin.version>0.37.0</docker-maven-plugin.version>
+		<it.archimedesfw.wiremock.docker.image>rodolpheche/wiremock:2.27.1</it.archimedesfw.wiremock.docker.image>
+		<it.archimedesfw.wiremock.docker.alias>archimedes-it-wiremock</it.archimedesfw.wiremock.docker.alias>
+		<it.archimedesfw.wiremock.docker.internal_port>8080</it.archimedesfw.wiremock.docker.internal_port>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables combine.children="append">
+						<it.boot.wiremock.http.endpoint>http://${it-wiremock.host}:${it-wiremock.port}</it.boot.wiremock.http.endpoint>
+						<it-wiremock.host>${it-wiremock.host}</it-wiremock.host>
+						<it-wiremock.port>${it-wiremock.port}</it-wiremock.port>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>${docker-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-it-wiremock</id>
+						<!-- FIXME (anieto): we use the package phase as a workaround to ensure wiremock it's run before other containers in the pre-integration-test phase -->
+						<!-- this is necessary, for example, when running acceptance tests against the dockerized application -->
+						<phase>package</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+							<images>
+								<image>
+									<name>${it.archimedesfw.wiremock.docker.image}</name>
+									<alias>${it.archimedesfw.wiremock.docker.alias}</alias>
+									<run>
+										<ports>
+											<port>+it-wiremock.host:it-wiremock.port:${it.archimedesfw.wiremock.docker.internal_port}</port>
+										</ports>
+										<volumes>
+											<bind>
+												<volume>src/test/resources/wiremock-tile:/home/wiremock</volume>
+											</bind>
+										</volumes>
+										<wait>
+											<http>
+												<url>
+													http://${it-wiremock.host}:${it-wiremock.port}/__admin/
+												</url>
+												<method>GET</method>
+												<status>200</status>
+											</http>
+											<time>5000</time>
+										</wait>
+										<log>
+											<file>${project.build.directory}/logs/it-wiremock.log</file>
+										</log>
+										<network>
+											<name>${it.archimedesfw.docker.network}</name>
+											<alias>${it.archimedesfw.wiremock.docker.alias}</alias>
+										</network>
+									</run>
+								</image>
+							</images>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-remove-containers</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

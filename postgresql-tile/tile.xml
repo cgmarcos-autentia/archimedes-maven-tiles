@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
+
+		<it.archimedesfw.docker.network>archimedes</it.archimedesfw.docker.network>
+		<it.archimedesfw.postgresql.docker.image>postgres:10-alpine</it.archimedesfw.postgresql.docker.image>
+		<it.archimedesfw.postgresql.docker.alias>archimedes-it-db</it.archimedesfw.postgresql.docker.alias>
+		<it.archimedesfw.postgresql.docker.internal_port>5432</it.archimedesfw.postgresql.docker.internal_port>
+		<it.archimedesfw.postgresql.db>archimedes</it.archimedesfw.postgresql.db>
+		<it.archimedesfw.postgresql.user>postgres</it.archimedesfw.postgresql.user>
+		<it.archimedesfw.postgresql.password>verysecret</it.archimedesfw.postgresql.password>
+		<it.archimedesfw.postgresql.schema>public</it.archimedesfw.postgresql.schema>
+		<it.archimedesfw.postgresql.startupTimeout>20000</it.archimedesfw.postgresql.startupTimeout>
+		<it.archimedesfw.postgresql.removeVolumesOnStop>true</it.archimedesfw.postgresql.removeVolumesOnStop>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables combine.children="append">
+						<it.archimedesfw.postgresql.host>${it.postgresql.host}</it.archimedesfw.postgresql.host>
+						<it.archimedesfw.postgresql.port>${it.postgresql.port}</it.archimedesfw.postgresql.port>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>${docker-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-it-postgres</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+							<images>
+								<image>
+									<name>${it.archimedesfw.postgresql.docker.image}</name>
+									<alias>${it.archimedesfw.postgresql.docker.alias}</alias>
+									<run>
+										<ports>
+											<port>+it.archimedesfw.postgresql.host:it.archimedesfw.postgresql.port:${it.archimedesfw.postgresql.docker.internal_port}</port>
+										</ports>
+										<wait>
+											<log>(?s)database system is ready to accept connections</log>
+											<time>${it.archimedesfw.postgresql.startupTimeout}</time>
+										</wait>
+										<volumes>
+											<bind>
+												<volume>src/test/resources/initdb:/docker-entrypoint-initdb.d</volume>
+											</bind>
+										</volumes>
+										<log>
+											<file>${project.build.directory}/logs/it-postgresql-db.log</file>
+										</log>
+										<env>
+											<POSTGRES_USER>${it.archimedesfw.postgresql.user}</POSTGRES_USER>
+											<POSTGRES_PASSWORD>${it.archimedesfw.postgresql.password}</POSTGRES_PASSWORD>
+											<POSTGRES_DB>${it.archimedesfw.postgresql.db}</POSTGRES_DB>
+										</env>
+										<network>
+											<name>${it.archimedesfw.docker.network}</name>
+											<alias>${it.archimedesfw.postgresql.docker.alias}</alias>
+										</network>
+									</run>
+								</image>
+							</images>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-remove-containers</id>
+						<phase>post-integration-test</phase>
+						<configuration>
+							<removeVolumes>${it.archimedesfw.postgresql.removeVolumesOnStop}</removeVolumes>
+						</configuration>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

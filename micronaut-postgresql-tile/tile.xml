@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<it.archimedesfw.postgresql.datasource>default</it.archimedesfw.postgresql.datasource>
+		<it.archimedesfw.postgresql.flyway.locations>classpath:db.migration,classpath:db.sampledata</it.archimedesfw.postgresql.flyway.locations>
+	</properties>
+
+	<tiles>
+		<tile>io.archimedesfw.maven.tiles:postgresql-tile:1.0.0-SNAPSHOT</tile>
+	</tiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<systemProperties combine.children="append">
+						<property>
+							<name>datasources.${it.archimedesfw.postgresql.datasource}.url</name>
+							<value>jdbc:postgresql://${it.archimedesfw.postgresql.host}:${it.archimedesfw.postgresql.port}/${it.archimedesfw.postgresql.db}</value>
+						</property>
+						<property>
+							<name>datasources.${it.archimedesfw.postgresql.datasource}.username</name>
+							<value>${it.archimedesfw.postgresql.user}</value>
+						</property>
+						<property>
+							<name>datasources.${it.archimedesfw.postgresql.datasource}.password</name>
+							<value>${it.archimedesfw.postgresql.password}</value>
+						</property>
+						<property>
+							<name>datasources.${it.archimedesfw.postgresql.datasource}.hikari.schema</name>
+							<value>${it.archimedesfw.postgresql.schema}</value>
+						</property>
+						<property>
+							<name>flyway.datasources.${it.archimedesfw.postgresql.datasource}.locations</name>
+							<value>${it.archimedesfw.postgresql.flyway.locations}</value>
+						</property>
+					</systemProperties>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

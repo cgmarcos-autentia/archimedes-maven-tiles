@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
+
+		<it.archimedesfw.docker.network>archimedes</it.archimedesfw.docker.network>
+		<it.archimedesfw.sqlserver.docker.image>mcr.microsoft.com/mssql/server:2017-GA-ubuntu</it.archimedesfw.sqlserver.docker.image>
+		<it.archimedesfw.sqlserver.docker.alias>archimedes-sqlserver-db</it.archimedesfw.sqlserver.docker.alias>
+		<it.archimedesfw.sqlserver.docker.internal_port>1433</it.archimedesfw.sqlserver.docker.internal_port>
+		<it.archimedesfw.sqlserver.user>SA</it.archimedesfw.sqlserver.user>
+		<it.archimedesfw.sqlserver.password>verysecret</it.archimedesfw.sqlserver.password>
+		<!-- License for SQL Server -->
+		<it.archimedesfw.sqlserver.pid>Enterprise</it.archimedesfw.sqlserver.pid>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>${docker-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-it-sqlserver</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+							<images>
+								<image>
+									<name>${it.archimedesfw.sqlserver.docker.image}</name>
+									<alias>${it.archimedesfw.sqlserver.docker.alias}</alias>
+									<run>
+										<ports>
+											<port>+it.archimedesfw.sqlserver.host:it.archimedesfw.sqlserver.port:${it.archimedesfw.sqlserver.docker.internal_port}</port>
+										</ports>
+										<wait>
+											<log>(?s)Database and Schemas created</log>
+											<time>45000</time>
+										</wait>
+										<volumes>
+											<bind>
+												<volume>src/test/resources/sqlserver/scripts:/usr/src/script/</volume>
+											</bind>
+										</volumes>
+										<log>
+											<file>${project.build.directory}/logs/it-sqlserver-db.log</file>
+										</log>
+										<env>
+											<ACCEPT_EULA>Y</ACCEPT_EULA>
+											<MSSQL_SA_PASSWORD>${it.archimedesfw.sqlserver.password}</MSSQL_SA_PASSWORD>
+											<MSSQL_PID>${it.archimedesfw.sqlserver.pid}</MSSQL_PID>
+										</env>
+										<entrypoint>
+											<shell>/usr/src/script/entrypoint.sh</shell>
+										</entrypoint>
+										<network>
+											<name>${it.archimedesfw.docker.network}</name>
+											<alias>${it.archimedesfw.sqlserver.docker.alias}</alias>
+										</network>
+									</run>
+								</image>
+							</images>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-remove-containers</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

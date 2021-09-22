@@ -8,7 +8,7 @@
 	</properties>
 
 	<tiles>
-		<tile>io.archimedesfw.maven.tiles:sqlserver-tile:0.0.2-SNAPSHOT</tile>
+		<tile>io.archimedesfw.maven.tiles:sqlserver-tile:0.0.2</tile>
 	</tiles>
 
 	<build>

@@ -23,4 +23,6 @@ If your datasource is not named default you can configure the property `it.archi
 
 Micronaut Flyway scripts locations property is configured too using  `classpath:db.migration` and `classpath:db.sampledata` locations. You could change these locations with property `it.archimedesfw.sqlserver.flyway.locations`.
 
-
+**Default Properties Values:**
+* `it.archimedesfw.sqlserver.datasource` - default
+* `it.archimedesfw.sqlserver.flyway.locations` - classpath:db.migration,classpath:db.sampledata

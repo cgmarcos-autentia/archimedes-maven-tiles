@@ -21,4 +21,8 @@ If your datasource is not named default you can configure the property `it.archi
 
 Microanut Flyway scripts locations property is configured too using  `classpath:db.migration` and `classpath:db.sampledata` locations. You could change these locations with property `it.archimedesfw.flyway.locations`.
 
+**Default Properties Values:**
+* `it.archimedesfw.postgresql.datasource`- default
+* `it.archimedesfw.postgresql.flyway.locations` - classpath:db.migration,classpath:db.sampledata
+
 

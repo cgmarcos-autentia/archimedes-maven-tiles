@@ -24,3 +24,12 @@ The App container will be registered in the `archimedesfw` network as `archimede
 A resource `.env` should be added to test resources in `app-launcher-tile` folder. This file will have all env properties that you service need it.
 
 The tile has been configured to use `@` character like delimiter for defining variables which will be substituted for maven properties. For example, it is useful when you need to configure the database connectivity of your application which has been configured using `postgresql-tile`.
+
+**Default Properties values:**
+* `docker-maven-plugin.version` - 0.37.0
+* `it.archimedesfw.docker.network` - archimedes
+* `it.archimedesfw.app.docker.image` - local/${project.parent.artifactId}:${docker.tag}
+* `it.archimedesfw.app.docker.internal_port` - 8080
+* `it.archimedesfw.app.docker.alias` - archimedes-it-app
+* `it.archimedesfw.app.removeVolumesOnStop` - true
+* `it.archimedesfw.app.stopMode` - graceful [graceful, kill]

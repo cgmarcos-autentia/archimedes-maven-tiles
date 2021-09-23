@@ -24,3 +24,13 @@ The WireMock container will be registered in the `archimedes` network as `archim
 A `wiremock-tile` folder should be created in you test resources. This folder should have another folder `mappings` with the wiremock files you want to use.
 
 Those files would be placed into /home/wiremock folder inside the container as the image documentation explains.
+
+**Default Properties Values:**
+* `docker-maven-plugin.version` - 0.37.0
+* `it.archimedesfw.wiremock.version` - 2.31.0
+* `it.archimedesfw.wiremock.docker.image` - rodolpheche/wiremock:${it.archimedesfw.wiremock.version}
+* `it.archimedesfw.wiremock.docker.alias` - archimedes-it-wiremock
+* `it.archimedesfw.wiremock.docker.internal_port` - 8080
+* `it.archimedesfw.wiremock.startupTimeout` - 10000
+* `it.archimedesfw.wiremock.removeVolumesOnStop` - true
+* `it.archimedesfw.wiremock.stopMode` - graceful

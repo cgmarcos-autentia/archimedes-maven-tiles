@@ -25,3 +25,16 @@ You can disable some security settings using the next maven properties:
 - `it.archimedesfw.micronaut.security.enabled`: enable/disable Micronaut security.
 - `it.archimedesfw.micronaut.security.jwt.enabled`: enable/disable JWT security.
 - `it.archimedesfw.micronaut.security.jwt.bearer.enabled`: enable/disable Bearer HTTP Header security.
+
+**Default Properties values:**
+* `it.archimedesfw.micronaut.security.enabled` - true
+* `it.archimedesfw.micronaut.security.jwt.enabled` - true
+* `it.archimedesfw.micronaut.security.jwt.bearer.enabled` - true
+
+**Default ENV Properties values:**
+* `MICRONAUT_ENVIRONMENTS` - test
+* `MICRONAUT_SECURITY_ENABLED` - ${it.archimedesfw.micronaut.security.enabled}
+* `MICRONAUT_SECURITY_TOKEN_JWT_ENABLED` - ${it.archimedesfw.micronaut.security.jwt.enabled}
+* `MICRONAUT_SECURITY_TOKEN_JWT_BEARER_ENABLED` - ${it.archimedesfw.micronaut.security.jwt.bearer.enabled}
+* `MICRONAUT_SECURITY_TOKEN_JWT_BEARER_SIGNATURES_JWKS_ADFS_URL` - file:/opt/security/jwks.json
+* `MICRONAUT_SECURITY_TOKEN_JWT_BEARER_SIGNATURES_JWKS_ADFS_KEYTYPE` - RSA

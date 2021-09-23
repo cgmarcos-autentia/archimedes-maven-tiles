@@ -15,6 +15,7 @@
 		<it.archimedesfw.postgresql.schema>public</it.archimedesfw.postgresql.schema>
 		<it.archimedesfw.postgresql.startupTimeout>20000</it.archimedesfw.postgresql.startupTimeout>
 		<it.archimedesfw.postgresql.removeVolumesOnStop>true</it.archimedesfw.postgresql.removeVolumesOnStop>
+		<it.archimedesfw.postgresql.stopMode>graceful</it.archimedesfw.postgresql.stopMode>
 	</properties>
 
 	<build>
@@ -72,6 +73,7 @@
 											<name>${it.archimedesfw.docker.network}</name>
 											<alias>${it.archimedesfw.postgresql.docker.alias}</alias>
 										</network>
+										<stopMode>${it.archimedesfw.postgresql.docker.stopMode}</stopMode>
 									</run>
 								</image>
 							</images>

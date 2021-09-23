@@ -6,13 +6,18 @@
 		<docker-maven-plugin.version>0.37.0</docker-maven-plugin.version>
 
 		<it.archimedesfw.docker.network>archimedes</it.archimedesfw.docker.network>
+
 		<it.archimedesfw.sqlserver.docker.image>mcr.microsoft.com/mssql/server:2017-GA-ubuntu</it.archimedesfw.sqlserver.docker.image>
 		<it.archimedesfw.sqlserver.docker.alias>archimedes-sqlserver-db</it.archimedesfw.sqlserver.docker.alias>
 		<it.archimedesfw.sqlserver.docker.internal_port>1433</it.archimedesfw.sqlserver.docker.internal_port>
+
 		<it.archimedesfw.sqlserver.user>SA</it.archimedesfw.sqlserver.user>
 		<it.archimedesfw.sqlserver.password>verysecret</it.archimedesfw.sqlserver.password>
 		<!-- License for SQL Server -->
 		<it.archimedesfw.sqlserver.pid>Enterprise</it.archimedesfw.sqlserver.pid>
+		<it.archimedesfw.sqlserver.startupTimeout>45000</it.archimedesfw.sqlserver.startupTimeout>
+		<it.archimedesfw.sqlserver.stopMode>graceful</it.archimedesfw.sqlserver.stopMode>
+		<it.archimedesfw.sqlserver.removeVolumesOnStop>true</it.archimedesfw.sqlserver.removeVolumesOnStop>
 	</properties>
 
 	<build>
@@ -41,7 +46,7 @@
 										</ports>
 										<wait>
 											<log>(?s)Database and Schemas created</log>
-											<time>45000</time>
+											<time>${it.archimedesfw.sqlserver.startupTimeout}</time>
 										</wait>
 										<volumes>
 											<bind>
@@ -63,6 +68,7 @@
 											<name>${it.archimedesfw.docker.network}</name>
 											<alias>${it.archimedesfw.sqlserver.docker.alias}</alias>
 										</network>
+										<stopMode>${it.archimedesfw.sqlserver.docker.stopMode}</stopMode>
 									</run>
 								</image>
 							</images>
@@ -71,6 +77,9 @@
 					<execution>
 						<id>stop-remove-containers</id>
 						<phase>post-integration-test</phase>
+						<configuration>
+							<removeVolumes>${it.archimedesfw.sqlserver.removeVolumesOnStop}</removeVolumes>
+						</configuration>
 						<goals>
 							<goal>stop</goal>
 						</goals>

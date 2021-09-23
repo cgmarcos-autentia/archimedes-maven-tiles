@@ -9,6 +9,8 @@
 		<it.archimedesfw.app.docker.image>local/${project.parent.artifactId}:${docker.tag}</it.archimedesfw.app.docker.image>
 		<it.archimedesfw.app.docker.internal_port>8080</it.archimedesfw.app.docker.internal_port>
 		<it.archimedesfw.app.docker.alias>archimedes-it-app</it.archimedesfw.app.docker.alias>
+		<it.archimedesfw.app.removeVolumesOnStop>true</it.archimedesfw.app.removeVolumesOnStop>
+		<it.archimedesfw.app.stopMode>graceful</it.archimedesfw.app.stopMode>
 	</properties>
 
 	<build>
@@ -83,6 +85,7 @@
 											<name>${it.archimedesfw.docker.network}</name>
 											<alias>${it.archimedesfw.app.docker.alias}</alias>
 										</network>
+										<stopMode>${it.archimedesfw.app.docker.stopMode}</stopMode>
 									</run>
 								</image>
 							</images>
@@ -91,6 +94,9 @@
 					<execution>
 						<id>stop-remove-containers</id>
 						<phase>post-integration-test</phase>
+						<configuration>
+							<removeVolumes>${it.archimedesfw.app.removeVolumesOnStop}</removeVolumes>
+						</configuration>
 						<goals>
 							<goal>stop</goal>
 						</goals>

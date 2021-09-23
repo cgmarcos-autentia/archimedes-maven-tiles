@@ -9,6 +9,10 @@
 		<it.archimedesfw.wiremock.docker.image>rodolpheche/wiremock:${it.archimedesfw.wiremock.version}</it.archimedesfw.wiremock.docker.image>
 		<it.archimedesfw.wiremock.docker.alias>archimedes-it-wiremock</it.archimedesfw.wiremock.docker.alias>
 		<it.archimedesfw.wiremock.docker.internal_port>8080</it.archimedesfw.wiremock.docker.internal_port>
+
+		<it.archimedesfw.wiremock.startupTimeout>10000</it.archimedesfw.wiremock.startupTimeout>
+		<it.archimedesfw.wiremock.removeVolumesOnStop>true</it.archimedesfw.wiremock.removeVolumesOnStop>
+		<it.archimedesfw.wiremock.stopMode>graceful</it.archimedesfw.wiremock.stopMode>
 	</properties>
 
 	<build>
@@ -61,7 +65,7 @@
 												<method>GET</method>
 												<status>200</status>
 											</http>
-											<time>5000</time>
+											<time>${it.archimedesfw.wiremock.startupTimeout}</time>
 										</wait>
 										<log>
 											<file>${project.build.directory}/logs/it-wiremock.log</file>
@@ -70,6 +74,7 @@
 											<name>${it.archimedesfw.docker.network}</name>
 											<alias>${it.archimedesfw.wiremock.docker.alias}</alias>
 										</network>
+										<stopMode>${it.archimedesfw.wiremock.docker.stopMode}</stopMode>
 									</run>
 								</image>
 							</images>
@@ -78,6 +83,9 @@
 					<execution>
 						<id>stop-remove-containers</id>
 						<phase>post-integration-test</phase>
+						<configuration>
+							<removeVolumes>${it.archimedesfw.wiremock.removeVolumesOnStop}</removeVolumes>
+						</configuration>
 						<goals>
 							<goal>stop</goal>
 						</goals>
